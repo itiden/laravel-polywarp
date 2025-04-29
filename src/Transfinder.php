@@ -13,7 +13,7 @@ final readonly class Transfinder
 {
     public function discoverTranslations(): Collection
     {
-        return collect(Config::get('transfinder.lang_paths'))
+        return collect(app('translator')->getLoader()->paths())
             ->flatMap(static fn(string $path): Collection => collect(File::allFiles($path))
                 ->map(static fn(SplFileInfo $file): array => [
                     'path' => $file->getPathname(),
@@ -36,7 +36,10 @@ final readonly class Transfinder
 
                 return $acc;
             }, collect())
-            ->undot();
+            ->undot()
+            ->map(static function (array $value): array {
+                return collect($value)->dot()->filter(fn($trans) => is_string($trans))->toArray();
+            });
     }
 
     public function discoverUsedTranslationKeys(): Collection
@@ -61,7 +64,6 @@ final readonly class Transfinder
     private function compileTypeOverloads(Collection $translations): string
     {
         return collect($translations->first())
-            ->dot()
             ->map(static function (string $value, string $key): string {
                 $params = [];
                 preg_match_all('/:(\w+)/', $value, $matches);
@@ -85,13 +87,9 @@ final readonly class Transfinder
             array $value,
             string $key,
         ) use ($keysToKeep): array {
-            $value = collect($value)->dot();
+            $value = array_filter($value, static fn(string $key) => $keysToKeep->has($key), mode: ARRAY_FILTER_USE_KEY);
 
-            $value = $value->filter(static function (string $_, string $key) use ($keysToKeep): bool {
-                return $keysToKeep->has($key);
-            });
-
-            return [$key => $value->toArray()];
+            return [$key => $value];
         }), JSON_THROW_ON_ERROR);
 
         return <<<ts

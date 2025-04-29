@@ -2,14 +2,6 @@
 
 return [
     /**
-     * The paths to search for translation files.
-     * These paths will be searched recursively for translation files.
-     */
-    'lang_paths' => [
-        lang_path()
-    ],
-
-    /**
      * The paths to scan for translation keys.
      */
     'script_paths' => [

@@ -1,4 +1,4 @@
-laravel: "@testbench"
+laravel: "./workbench"
 
 providers:
   # - Workbench\App\Providers\WorkbenchServiceProvider
@@ -12,20 +12,13 @@ workbench:
   install: true
   health: false
   discovers:
-    web: true
-    api: true
     commands: true
-    components: false
-    factories: true
-    views: false
   build:
-    - asset-publish
-    - create-sqlite-db
-    - db-wipe
-    - migrate-fresh
   assets:
-    - laravel-assets
   sync:
+    - from: lang
+      to: workbench/lang
+      reverse: true
     - from: storage
       to: workbench/storage
       reverse: true

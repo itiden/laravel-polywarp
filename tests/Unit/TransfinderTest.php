@@ -8,22 +8,18 @@ use Itiden\Transfinder\Transfinder;
 use function Orchestra\Testbench\workbench_path;
 
 it('discovers all translations in folders', function (): void {
-    Config::set('transfinder.lang_paths', [
-        workbench_path('lang'),
-    ]);
-
     $translations = app(Transfinder::class)->discoverTranslations();
 
     foreach (['en', 'sv'] as $lang) {
-        expect($translations[$lang]['test'])
+        expect($translations[$lang])
             ->toHaveKeys([
-                'welcome',
-                'goodbye',
-                'greeting.morning',
-                'greeting.afternoon',
-                'greeting.evening',
-                'farewell.formal',
-                'farewell.informal',
+                'test.welcome',
+                'test.goodbye',
+                'test.greeting.morning',
+                'test.greeting.afternoon',
+                'test.greeting.evening',
+                'test.farewell.formal',
+                'test.farewell.informal',
             ]);
     }
 });
@@ -58,17 +54,14 @@ it('discovers used keys with attributes', function (): void {
 });
 
 it('can compile', function (): void {
-    Config::set('transfinder.lang_paths', [
-        workbench_path('lang'),
-    ]);
-
-    Config::set('transfinder.script_paths', [
-        workbench_path('resources/js'),
-    ]);
-
-    $translations = app(Transfinder::class)->discoverTranslations();
-    $usedKeys = app(Transfinder::class)->discoverUsedTranslationKeys();
-    $compiled = app(Transfinder::class)->compile($translations, $usedKeys);
+    $compiled = app(Transfinder::class)->compile(collect([
+        'en' => [
+            'foo' => 'bar',
+        ],
+        'sv' => [
+            'foo' => 'bar',
+        ],
+    ]), collect());
 
     expect($compiled)
         ->toBe(<<<'TS'
@@ -78,7 +71,7 @@ it('can compile', function (): void {
         const translations = {"en":[],"sv":[]};
 
         type TranslationFunction = {
-        (key: "test.welcome"): string;(key: "test.goodbye"): string;(key: "test.greeting.morning"): string;(key: "test.greeting.afternoon"): string;(key: "test.greeting.evening"): string;(key: "test.farewell.formal"): string;(key: "test.farewell.informal"): string;
+        (key: "foo"): string;
         };
 
         export const t: TranslationFunction = (
