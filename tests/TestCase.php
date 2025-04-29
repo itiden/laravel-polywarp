@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Itiden\Transfinder\Tests;
+namespace Itiden\Polywarp\Tests;
 
-use Itiden\Transfinder\TransfinderServiceProvider;
+use Itiden\Polywarp\PolywarpServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 use function Orchestra\Testbench\package_path;
@@ -14,7 +14,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            TransfinderServiceProvider::class,
+            PolywarpServiceProvider::class,
         ];
     }
 

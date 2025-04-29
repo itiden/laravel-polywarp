@@ -1,5 +1,5 @@
 {
-  "name": "itiden/transfinder",
+  "name": "itiden/laravel-polywarp",
   "license": "mit",
   "require": {
     "laravel/framework": "^12.10"
@@ -11,19 +11,19 @@
   },
   "autoload": {
     "psr-4": {
-      "Itiden\\Transfinder\\": "src/"
+      "Itiden\\Polywarp\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Itiden\\Transfinder\\Tests\\": "tests/",
+      "Itiden\\Polywarp\\Tests\\": "tests/",
       "Workbench\\App\\": "workbench/app/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Itiden\\Transfinder\\TransfinderServiceProvider"
+        "Itiden\\Polywarp\\PolywarpServiceProvider"
       ]
     }
   },

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Itiden\Transfinder\Tests\TestCase;
+use Itiden\Polywarp\Tests\TestCase;
 
 pest()
     ->extend(TestCase::class)

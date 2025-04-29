@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Itiden\Transfinder;
+namespace Itiden\Polywarp;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use SplFileInfo;
 
-final readonly class Transfinder
+final readonly class Polywarp
 {
     public function discoverTranslations(): Collection
     {
@@ -44,9 +44,9 @@ final readonly class Transfinder
 
     public function discoverUsedTranslationKeys(): Collection
     {
-        $outputPath = Config::get('transfinder.output_path');
+        $outputPath = Config::get('polywarp.output_path');
 
-        return collect(Config::get('transfinder.script_paths'))
+        return collect(Config::get('polywarp.script_paths'))
             ->flatMap(File::allFiles(...))
             ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
                 if ($file->getExtension() !== 'ts' || $file->getPathname() === $outputPath) {

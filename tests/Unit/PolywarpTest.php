@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Config;
-use Itiden\Transfinder\Transfinder;
+use Itiden\Polywarp\Polywarp;
 
 use function Orchestra\Testbench\workbench_path;
 
 it('discovers all translations in folders', function (): void {
-    $translations = app(Transfinder::class)->discoverTranslations();
+    $translations = app(Polywarp::class)->discoverTranslations();
 
     foreach (['en', 'sv'] as $lang) {
         expect($translations[$lang])
@@ -25,11 +25,11 @@ it('discovers all translations in folders', function (): void {
 });
 
 it('discovers all used translation keys', function (): void {
-    Config::set('transfinder.script_paths', [
+    Config::set('polywarp.script_paths', [
         workbench_path('resources/js'),
     ]);
 
-    $usedKeys = app(Transfinder::class)->discoverUsedTranslationKeys();
+    $usedKeys = app(Polywarp::class)->discoverUsedTranslationKeys();
 
     expect($usedKeys->toArray())
         ->toEqualCanonicalizing([
@@ -39,11 +39,11 @@ it('discovers all used translation keys', function (): void {
 });
 
 it('discovers used keys with attributes', function (): void {
-    Config::set('transfinder.script_paths', [
+    Config::set('polywarp.script_paths', [
         workbench_path('resources/js'),
     ]);
 
-    $usedKeys = app(Transfinder::class)->discoverUsedTranslationKeys();
+    $usedKeys = app(Polywarp::class)->discoverUsedTranslationKeys();
     $usedKeys = $usedKeys->toArray();
 
     expect($usedKeys)
@@ -54,7 +54,7 @@ it('discovers used keys with attributes', function (): void {
 });
 
 it('can compile', function (): void {
-    $compiled = app(Transfinder::class)->compile(collect([
+    $compiled = app(Polywarp::class)->compile(collect([
         'en' => [
             'foo' => 'bar',
         ],

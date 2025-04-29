@@ -1,4 +1,4 @@
-# Transfinder
+# Polywarp
 
 Keep your translations in sync between your laravel backend and frontend.
 
@@ -7,7 +7,7 @@ Fully typed.
 ## Installation
 
 ```sh
-composer require itiden/transfinder
+composer require itiden/polywarp
 ```
 
 then install the vite run plugin
@@ -25,8 +25,8 @@ export default defineConfig({
   plugins: [
     // ...
     run({
-      name: "transfinder",
-      command: ["php", "artisan", "transfinder:generate"],
+      name: "polywarp",
+      command: ["php", "artisan", "polywarp:generate"],
       pattern: ["resources/lang/**/*.php", "resources/js/**/*.ts"],
     }),
   ],

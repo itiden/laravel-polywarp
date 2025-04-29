@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Itiden\Transfinder;
+namespace Itiden\Polywarp;
 
 use Illuminate\Support\ServiceProvider;
-use Itiden\Transfinder\Console\Commands\GenerateTranslations;
+use Itiden\Polywarp\Console\Commands\GenerateTranslations;
 use Override;
 
-final class TransfinderServiceProvider extends ServiceProvider
+final class PolywarpServiceProvider extends ServiceProvider
 {
     #[Override]
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/transfinder.php', 'transfinder');
+        $this->mergeConfigFrom(__DIR__ . '/../config/polywarp.php', 'polywarp');
     }
 
     public function boot(): void
