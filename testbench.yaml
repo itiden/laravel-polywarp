@@ -9,10 +9,11 @@ seeders:
 
 workbench:
   start: "/"
-  install: true
+  install: false
   health: false
   discovers:
     commands: true
+    views: true
   build:
   assets:
   sync:
