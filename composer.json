@@ -1,9 +1,14 @@
 {
   "name": "itiden/transfinder",
+  "license": "mit",
   "require": {
     "laravel/framework": "^12.10"
   },
-  "license": "mit",
+  "require-dev": {
+    "pestphp/pest": "^3.8",
+    "orchestra/testbench": "^10.2",
+    "carthage-software/mago": "^0.23.0"
+  },
   "autoload": {
     "psr-4": {
       "Itiden\\Transfinder\\": "src/"
@@ -15,21 +20,11 @@
       "Workbench\\App\\": "workbench/app/"
     }
   },
-  "authors": [
-    {
-      "name": "NeoIsRecursive",
-      "email": "neo.leijondahl@gmail.com"
-    }
-  ],
-  "require-dev": {
-    "pestphp/pest": "^3.8",
-    "orchestra/testbench": "^10.2",
-    "carthage-software/mago": "^0.23.0"
-  },
-  "config": {
-    "allow-plugins": {
-      "pestphp/pest-plugin": true,
-      "carthage-software/mago": true
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Itiden\\Transfinder\\TransfinderServiceProvider"
+      ]
     }
   },
   "scripts": {
@@ -49,5 +44,17 @@
       "@clear",
       "@php vendor/bin/pest"
     ]
-  }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "carthage-software/mago": true
+    }
+  },
+  "authors": [
+    {
+      "name": "NeoIsRecursive",
+      "email": "neo.leijondahl@gmail.com"
+    }
+  ]
 }

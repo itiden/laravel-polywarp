@@ -41,10 +41,12 @@ final readonly class Transfinder
 
     public function discoverUsedTranslationKeys(): Collection
     {
+        $outputPath = Config::get('transfinder.output_path');
+
         return collect(Config::get('transfinder.script_paths'))
             ->flatMap(File::allFiles(...))
-            ->flatMap(static function (SplFileInfo $file): Collection {
-                if ($file->getPathname() === Config::get('transfinder.output_path')) {
+            ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
+                if ($file->getExtension() !== 'ts' || $file->getPathname() === $outputPath) {
                     return collect();
                 }
 
