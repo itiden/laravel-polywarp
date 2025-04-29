@@ -80,7 +80,7 @@ it('can compile', function (): void {
         ): string => {
             const lang = document.documentElement.lang as keyof typeof translations;
 
-            const value = translations[lang][key];
+            const value = translations[lang][key as keyof (typeof translations)[typeof lang]];
 
             if (typeof value !== "string") {
                 console.warn(`Translation key "${key}" not found`);
@@ -93,7 +93,7 @@ it('can compile', function (): void {
 
             return Object.entries(params).reduce(
                 (str, [param, value]) => str.replace(`:${param}`, String(value)),
-                value
+                String(value)
             );
         };
 

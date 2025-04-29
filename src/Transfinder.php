@@ -63,7 +63,8 @@ final readonly class Transfinder
 
     private function compileTypeOverloads(Collection $translations): string
     {
-        return collect($translations->first())
+        return $translations
+            ->flatMap(fn($e) => $e)
             ->map(static function (string $value, string $key): string {
                 $params = [];
                 preg_match_all('/:(\w+)/', $value, $matches);
@@ -107,7 +108,7 @@ final readonly class Transfinder
         ): string => {
             const lang = document.documentElement.lang as keyof typeof translations;
 
-            const value = translations[lang][key];
+            const value = translations[lang][key as keyof (typeof translations)[typeof lang]];
 
             if (typeof value !== "string") {
                 console.warn(`Translation key "\${key}" not found`);
@@ -120,7 +121,7 @@ final readonly class Transfinder
 
             return Object.entries(params).reduce(
                 (str, [param, value]) => str.replace(`:\${param}`, String(value)),
-                value
+                String(value)
             );
         };
 
