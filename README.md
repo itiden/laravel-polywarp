@@ -7,7 +7,7 @@ Fully typed.
 ## Installation
 
 ```sh
-composer require itiden/polywarp
+composer require itiden/laravel-polywarp
 ```
 
 then install the vite run plugin
