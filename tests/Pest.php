@@ -8,3 +8,6 @@ pest()
     ->extend(TestCase::class)
     // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature', 'Unit');
+
+pest()->group('feature')->in('Feature');
+pest()->group('unit')->in('Unit');
