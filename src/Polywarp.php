@@ -84,13 +84,14 @@ final readonly class Polywarp
 
     public function compile(Collection $availableTranlsations, Collection $keysToKeep): string
     {
-        $translationsToIncludeInBundle = json_encode(
-            $availableTranlsations->mapWithKeys(static fn(
-                array $value,
-                string $lang,
-            ): array => [$lang => array_filter($value, $keysToKeep->contains(...), mode: ARRAY_FILTER_USE_KEY)]),
-            JSON_THROW_ON_ERROR
-        );
+        $translationsToIncludeInBundle = json_encode($availableTranlsations->mapWithKeys(static fn(
+            array $value,
+            string $lang,
+        ): array => [$lang => array_filter(
+            $value,
+            $keysToKeep->contains(...),
+            mode: ARRAY_FILTER_USE_KEY,
+        )]), JSON_THROW_ON_ERROR);
 
         return <<<ts
         // This file is auto-generated. Do not edit it manually.

@@ -21,13 +21,10 @@ final class GenerateTranslations extends Command
 
         File::ensureDirectoryExists(pathinfo($outFile, PATHINFO_DIRNAME));
 
-        File::put(
-            $outFile,
-            $polywarp->compile(
-                $polywarp->discoverTranslations(),
-                $polywarp->discoverUsedTranslationKeys()
-            ),
-        );
+        File::put($outFile, $polywarp->compile(
+            availableTranlsations: $polywarp->discoverTranslations(),
+            keysToKeep: $polywarp->discoverUsedTranslationKeys(),
+        ));
 
         $this->info('Translations generated successfully.');
 

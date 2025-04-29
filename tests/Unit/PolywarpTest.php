@@ -54,14 +54,15 @@ it('discovers used keys with attributes', function (): void {
 });
 
 it('can compile', function (): void {
-    $compiled = app(Polywarp::class)->compile(collect([
-        'en' => [
-            'foo' => 'bar',
-        ],
-        'sv' => [
-            'foo' => 'bar',
-        ],
-    ]), collect());
+    $compiled = app(Polywarp::class)
+        ->compile(collect([
+            'en' => [
+                'foo' => 'bar',
+            ],
+            'sv' => [
+                'foo' => 'bar',
+            ],
+        ]), collect());
 
     expect($compiled)
         ->toBe(<<<'TS'
