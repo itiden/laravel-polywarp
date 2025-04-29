@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Config;
 use Itiden\Transfinder\Transfinder;
 
 use function Orchestra\Testbench\workbench_path;
 
-it('discovers all translations in folders', function () {
+it('discovers all translations in folders', function (): void {
     Config::set('transfinder.lang_paths', [
         workbench_path('lang'),
     ]);
@@ -13,32 +15,34 @@ it('discovers all translations in folders', function () {
     $translations = app(Transfinder::class)->discoverTranslations();
 
     foreach (['en', 'sv'] as $lang) {
-        expect($translations[$lang]['test'])->toHaveKeys([
-            'welcome',
-            'goodbye',
-            'greeting.morning',
-            'greeting.afternoon',
-            'greeting.evening',
-            'farewell.formal',
-            'farewell.informal',
-        ]);
+        expect($translations[$lang]['test'])
+            ->toHaveKeys([
+                'welcome',
+                'goodbye',
+                'greeting.morning',
+                'greeting.afternoon',
+                'greeting.evening',
+                'farewell.formal',
+                'farewell.informal',
+            ]);
     }
 });
 
-it('discovers all used translation keys', function () {
+it('discovers all used translation keys', function (): void {
     Config::set('transfinder.script_paths', [
         workbench_path('resources/js'),
     ]);
 
     $usedKeys = app(Transfinder::class)->discoverUsedTranslationKeys();
 
-    expect($usedKeys->toArray())->toEqualCanonicalizing([
-        'test.welcome',
-        'test-with-attributes',
-    ]);
+    expect($usedKeys->toArray())
+        ->toEqualCanonicalizing([
+            'test.welcome',
+            'test-with-attributes',
+        ]);
 });
 
-it('discovers used keys with attributes', function () {
+it('discovers used keys with attributes', function (): void {
     Config::set('transfinder.script_paths', [
         workbench_path('resources/js'),
     ]);
@@ -46,13 +50,14 @@ it('discovers used keys with attributes', function () {
     $usedKeys = app(Transfinder::class)->discoverUsedTranslationKeys();
     $usedKeys = $usedKeys->toArray();
 
-    expect($usedKeys)->toEqualCanonicalizing([
-        'test.welcome',
-        'test-with-attributes',
-    ]);
+    expect($usedKeys)
+        ->toEqualCanonicalizing([
+            'test.welcome',
+            'test-with-attributes',
+        ]);
 });
 
-it('can compile', function () {
+it('can compile', function (): void {
     Config::set('transfinder.lang_paths', [
         workbench_path('lang'),
     ]);
@@ -65,9 +70,8 @@ it('can compile', function () {
     $usedKeys = app(Transfinder::class)->discoverUsedTranslationKeys();
     $compiled = app(Transfinder::class)->compile($translations, $usedKeys);
 
-
-    expect($compiled)->toBe(
-        <<<'TS'
+    expect($compiled)
+        ->toBe(<<<'TS'
         // This file is auto-generated. Do not edit it manually.
         /* eslint-disable */
 
@@ -100,6 +104,5 @@ it('can compile', function () {
             );
         };
 
-        TS
-    );
+        TS);
 });

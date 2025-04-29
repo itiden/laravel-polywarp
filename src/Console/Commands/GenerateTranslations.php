@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Itiden\Transfinder\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -14,14 +16,10 @@ final class GenerateTranslations extends Command
 
     public function handle(Transfinder $transfinder): int
     {
-
         File::ensureDirectoryExists(pathinfo(config('transfinder.output_path'), PATHINFO_DIRNAME));
         File::put(
             config('transfinder.output_path'),
-            $transfinder->compile(
-                $transfinder->discoverTranslations(),
-                $transfinder->discoverUsedTranslationKeys(),
-            ),
+            $transfinder->compile($transfinder->discoverTranslations(), $transfinder->discoverUsedTranslationKeys()),
         );
 
         $this->info('Translations generated successfully.');

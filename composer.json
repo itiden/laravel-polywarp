@@ -25,11 +25,13 @@
     ],
     "require-dev": {
         "pestphp/pest": "^3.8",
-        "orchestra/testbench": "^10.2"
+        "orchestra/testbench": "^10.2",
+        "carthage-software/mago": "^0.23.0"
     },
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "carthage-software/mago": true
         }
     },
     "scripts": {
