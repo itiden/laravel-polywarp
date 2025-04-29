@@ -1,55 +1,53 @@
 {
-    "name": "itiden/transfinder",
-    "require": {
-        "laravel/framework": "^12.10"
-    },
-    "license": "mit",
-    "autoload": {
-        "psr-4": {
-            "Itiden\\Transfinder\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Itiden\\Transfinder\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/",
-            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
-        }
-    },
-    "authors": [
-        {
-            "name": "NeoIsRecursive",
-            "email": "neo.leijondahl@gmail.com"
-        }
-    ],
-    "require-dev": {
-        "pestphp/pest": "^3.8",
-        "orchestra/testbench": "^10.2",
-        "carthage-software/mago": "^0.23.0"
-    },
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "carthage-software/mago": true
-        }
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "@clear",
-            "@prepare"
-        ],
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
-        "prepare": "@php vendor/bin/testbench package:discover --ansi",
-        "build": "@php vendor/bin/testbench workbench:build --ansi",
-        "serve": [
-            "Composer\\Config::disableProcessTimeout",
-            "@build",
-            "@php vendor/bin/testbench serve --ansi"
-        ],
-        "test": [
-            "@clear",
-            "@php vendor/bin/pest"
-        ]
+  "name": "itiden/transfinder",
+  "require": {
+    "laravel/framework": "^12.10"
+  },
+  "license": "mit",
+  "autoload": {
+    "psr-4": {
+      "Itiden\\Transfinder\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Itiden\\Transfinder\\Tests\\": "tests/",
+      "Workbench\\App\\": "workbench/app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "NeoIsRecursive",
+      "email": "neo.leijondahl@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "pestphp/pest": "^3.8",
+    "orchestra/testbench": "^10.2",
+    "carthage-software/mago": "^0.23.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "carthage-software/mago": true
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "@clear",
+      "@prepare"
+    ],
+    "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": "@php vendor/bin/testbench workbench:build --ansi",
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "@build",
+      "@php vendor/bin/testbench serve --ansi"
+    ],
+    "test": [
+      "@clear",
+      "@php vendor/bin/pest"
+    ]
+  }
 }
