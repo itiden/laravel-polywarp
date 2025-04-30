@@ -24,10 +24,6 @@ final readonly class Polywarp
             ->reduceWithKeys(static function (Collection $acc, array $file): Collection {
                 $key = implode('.', [$file['lang'], pathinfo($file['path'], PATHINFO_FILENAME)]);
 
-                if (pathinfo($file['path'], PATHINFO_EXTENSION) !== 'php') {
-                    return $acc;
-                }
-
                 $acc[$key] = match (pathinfo($file['path'], PATHINFO_EXTENSION)) {
                     'json' => json_decode($file['path'], true, JSON_THROW_ON_ERROR),
                     'php' => require $file['path'],
