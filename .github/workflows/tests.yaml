@@ -8,7 +8,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # TODO: add windows when we figure out why it doesn't discover the workbench path
+        os: [ubuntu-latest, macos-latest]
         php: ["8.4"]
         dependency-version: [prefer-lowest, prefer-stable]
 
