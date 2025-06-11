@@ -10,25 +10,21 @@ Fully typed.
 composer require itiden/laravel-polywarp
 ```
 
-then install the vite run plugin
+then install the vite run plugin (or import it from `./vendor/itiden/laravel-polywarp/vite-plugin/vite-plugin-polywarp`):
 
 ```sh
-npm install --save-dev vite-plugin-run
+npm install --save-dev vite-plugin-polywarp
 ```
 
 And then finally specify the plugin in your vite config:
 
 ```ts
-import { run } from "vite-plugin-run";
+import { polywarp } from "vite-plugin-run";
 
 export default defineConfig({
   plugins: [
     // ...
-    run({
-      name: "polywarp",
-      command: ["php", "artisan", "polywarp:generate"],
-      pattern: ["resources/lang/**/*.php", "resources/js/**/*.ts"],
-    }),
+    polywarp(),
   ],
 });
 ```
