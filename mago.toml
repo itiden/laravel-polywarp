@@ -3,7 +3,7 @@
 php_version = "8.4.0"
 
 [source]
-paths = ["src/", "tests/", "workbench/app/"]
+paths = ["src/", "workbench/app/"]
 includes = ["vendor"]
 excludes = []
 
@@ -18,4 +18,8 @@ plugins = ["laravel"]
 
 [[linter.rules]]
 name = "naming/class"
+level = "off"
+
+[[linter.rules]]
+name = "analysis/undefined-function-or-method"
 level = "off"

@@ -23,8 +23,8 @@ abstract class TestCase extends Orchestra
         // config()->set('database.default', 'testing');
     }
 
-    public static function applicationBasePath()
+    public static function applicationBasePath(): string
     {
-        return package_path('workbench');
+        return package_path(path: 'workbench');
     }
 }

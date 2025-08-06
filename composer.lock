@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "549a6e6110c2c7eb19aeea2704023646",
+    "content-hash": "8801888c6eb56195e814d5a7699fab61",
     "packages": [
         {
             "name": "brick/math",
@@ -5679,16 +5679,16 @@
         },
         {
             "name": "carthage-software/mago",
-            "version": "0.23.0",
+            "version": "0.26.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "427f12e6eb3df1c23e0f39329c38ad152d05d58d"
+                "reference": "baad2c067e7be59af500683769b72ac356eac10f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/427f12e6eb3df1c23e0f39329c38ad152d05d58d",
-                "reference": "427f12e6eb3df1c23e0f39329c38ad152d05d58d",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/baad2c067e7be59af500683769b72ac356eac10f",
+                "reference": "baad2c067e7be59af500683769b72ac356eac10f",
                 "shasum": ""
             },
             "require": {
@@ -5726,7 +5726,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/0.23.0"
+                "source": "https://github.com/carthage-software/mago/tree/0.26.1"
             },
             "funding": [
                 {
@@ -5734,7 +5734,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-13T16:38:38+00:00"
+            "time": "2025-06-29T23:11:29+00:00"
         },
         {
             "name": "composer/semver",

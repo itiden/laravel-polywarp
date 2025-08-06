@@ -11,46 +11,43 @@ it('discovers all translations in folders', function (): void {
     $translations = app(Polywarp::class)->discoverTranslations();
 
     foreach (['en', 'sv'] as $lang) {
-        expect($translations[$lang])
-            ->toHaveKeys([
-                'test.welcome',
-                'test.goodbye',
-                'test.greeting.morning',
-                'test.greeting.afternoon',
-                'test.greeting.evening',
-                'test.farewell.formal',
-                'test.farewell.informal',
-            ]);
+        expect($translations[$lang])->toHaveKeys([
+            'test.welcome',
+            'test.goodbye',
+            'test.greeting.morning',
+            'test.greeting.afternoon',
+            'test.greeting.evening',
+            'test.farewell.formal',
+            'test.farewell.informal',
+        ]);
     }
 });
 
 it('discovers all used translation keys', function (): void {
-    Config::set('polywarp.script_paths', [
-        workbench_path('resources/js'),
+    Config::set(key: 'polywarp.script_paths', value: [
+        workbench_path(path: 'resources/js'),
     ]);
 
     $usedKeys = app(Polywarp::class)->discoverUsedTranslationKeys();
 
-    expect($usedKeys->toArray())
-        ->toEqualCanonicalizing([
-            'test.welcome',
-            'test-with-attributes',
-        ]);
+    expect($usedKeys->toArray())->toEqualCanonicalizing([
+        'test.welcome',
+        'test-with-attributes',
+    ]);
 });
 
 it('discovers used keys with attributes', function (): void {
-    Config::set('polywarp.script_paths', [
-        workbench_path('resources/js'),
+    Config::set(key: 'polywarp.script_paths', value: [
+        workbench_path(path: 'resources/js'),
     ]);
 
     $usedKeys = app(Polywarp::class)->discoverUsedTranslationKeys();
     $usedKeys = $usedKeys->toArray();
 
-    expect($usedKeys)
-        ->toEqualCanonicalizing([
-            'test.welcome',
-            'test-with-attributes',
-        ]);
+    expect($usedKeys)->toEqualCanonicalizing([
+        'test.welcome',
+        'test-with-attributes',
+    ]);
 });
 
 it('can compile', function (): void {

@@ -17,15 +17,19 @@ final readonly class Polywarp
             ->flatMap(static fn(string $path): Collection => collect(File::allFiles($path))
                 ->map(static fn(SplFileInfo $file): array => [
                     'path' => $file->getPathname(),
-                    'lang' => str(substr(pathinfo($file->getPathname(), PATHINFO_DIRNAME), strlen($path) + 1))
-                        ->replace('/', '.')
-                        ->toString(),
+                    'lang' => str(substr(pathinfo($file->getPathname(), PATHINFO_DIRNAME), strlen($path) + 1))->replace(
+                        search: '/',
+                        replace: '.',
+                    )->toString(),
                 ]))
             ->reduceWithKeys(static function (Collection $acc, array $file): Collection {
-                $key = implode('.', [$file['lang'], pathinfo($file['path'], PATHINFO_FILENAME)]);
+                $key = implode(
+                    separator: '.',
+                    array: [$file['lang'], pathinfo($file['path'], PATHINFO_FILENAME)],
+                );
 
                 $acc[$key] = match (pathinfo($file['path'], PATHINFO_EXTENSION)) {
-                    'json' => json_decode($file['path'], true, JSON_THROW_ON_ERROR),
+                    'json' => json_decode($file['path'], associative: true, flags: JSON_THROW_ON_ERROR),
                     'php' => require $file['path'],
                     default => [],
                 };
@@ -34,15 +38,15 @@ final readonly class Polywarp
             }, collect())
             ->undot()
             ->map(static function (array $value): array {
-                return collect($value)->dot()->filter(fn($trans) => is_string($trans))->toArray();
+                return collect($value)->dot()->filter(fn(mixed $trans): bool => is_string($trans))->toArray();
             });
     }
 
     public function discoverUsedTranslationKeys(): Collection
     {
-        $outputPath = Config::get('polywarp.output_path');
+        $outputPath = Config::string(key: 'polywarp.output_path');
 
-        return collect(Config::get('polywarp.script_paths'))
+        return collect(Config::array(key: 'polywarp.script_paths'))
             ->flatMap(File::allFiles(...))
             ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
                 if ($file->getExtension() !== 'ts' || $file->getPathname() === $outputPath) {
@@ -51,7 +55,11 @@ final readonly class Polywarp
 
                 $content = $file->getContents();
 
-                preg_match_all('/t\(\s*([\'"])(.*?)\1/', $content, $matches);
+                preg_match_all(
+                    pattern: '/t\(\s*([\'"])(.*?)\1/',
+                    subject: $content,
+                    matches: $matches,
+                );
 
                 return collect($matches[2]);
             });
@@ -60,34 +68,41 @@ final readonly class Polywarp
     private function compileTypeOverloads(Collection $translations): string
     {
         return $translations
-            ->flatMap(fn($e) => $e)
+            ->collapse()
             ->map(static function (string $value, string $key): string {
                 $params = [];
-                preg_match_all('/:(\w+)/', $value, $matches);
+                preg_match_all(
+                    pattern: '/:(\w+)/',
+                    subject: $value,
+                    matches: $matches,
+                );
                 if (isset($matches[1])) {
                     $params = $matches[1];
                 }
 
                 if ($params) {
-                    $paramStr = implode(', ', array_map(fn(string $p): string => "{$p}: string | number", $params));
+                    $paramStr = implode(
+                        separator: ', ',
+                        array: array_map(fn(string $p): string => "{$p}: string | number", $params),
+                    );
                     return "(key: \"{$key}\", params: { {$paramStr} }): string;";
                 }
 
                 return "(key: \"{$key}\"): string;";
             })
-            ->implode('');
+            ->implode(value: '');
     }
 
     public function compile(Collection $availableTranlsations, Collection $keysToKeep): string
     {
-        $translationsToIncludeInBundle = json_encode($availableTranlsations->mapWithKeys(static fn(
-            array $value,
-            string $lang,
-        ): array => [$lang => array_filter(
-            $value,
-            $keysToKeep->contains(...),
-            mode: ARRAY_FILTER_USE_KEY,
-        )]), JSON_THROW_ON_ERROR);
+        $translationsToIncludeInBundle = json_encode(
+            $availableTranlsations->mapWithKeys(static fn(array $value, string $lang): array => [$lang => array_filter(
+                $value,
+                $keysToKeep->contains(...),
+                mode: ARRAY_FILTER_USE_KEY,
+            )]),
+            JSON_THROW_ON_ERROR,
+        );
 
         return <<<ts
         // This file is auto-generated. Do not edit it manually.

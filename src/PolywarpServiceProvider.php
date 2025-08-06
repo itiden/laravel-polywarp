@@ -13,7 +13,10 @@ final class PolywarpServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/polywarp.php', 'polywarp');
+        $this->mergeConfigFrom(
+            path: __DIR__ . '/../config/polywarp.php',
+            key: 'polywarp',
+        );
     }
 
     public function boot(): void

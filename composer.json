@@ -7,7 +7,7 @@
   "require-dev": {
     "pestphp/pest": "^3.8",
     "orchestra/testbench": "^10.2",
-    "carthage-software/mago": "^0.23.0"
+    "carthage-software/mago": "^0.26.1"
   },
   "autoload": {
     "psr-4": {
@@ -43,6 +43,11 @@
     "test": [
       "@clear",
       "@php vendor/bin/pest"
+    ],
+    "qa": [
+      "@php vendor/bin/mago fmt",
+      "@php vendor/bin/mago lint",
+      "@test"
     ]
   },
   "config": {

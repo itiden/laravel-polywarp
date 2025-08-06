@@ -17,7 +17,7 @@ final class GenerateTranslations extends Command
 
     public function handle(Polywarp $polywarp): int
     {
-        $outFile = Config::get('polywarp.output_path');
+        $outFile = Config::get(key: 'polywarp.output_path');
 
         File::ensureDirectoryExists(pathinfo($outFile, PATHINFO_DIRNAME));
 
@@ -26,7 +26,7 @@ final class GenerateTranslations extends Command
             keysToKeep: $polywarp->discoverUsedTranslationKeys(),
         ));
 
-        $this->info('Translations generated successfully.');
+        $this->info(string: 'Translations generated successfully.');
 
         return Command::SUCCESS;
     }
