@@ -49,7 +49,10 @@ final readonly class Polywarp
         return collect(Config::array(key: 'polywarp.script_paths'))
             ->flatMap(File::allFiles(...))
             ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
-                if ($file->getExtension() !== 'ts' || $file->getPathname() === $outputPath) {
+                if (
+                    !in_array($file->getExtension(), ['ts', 'tsx', 'vue'], strict: true) ||
+                        $file->getPathname() === $outputPath
+                ) {
                     return collect();
                 }
 
