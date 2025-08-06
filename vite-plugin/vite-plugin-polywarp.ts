@@ -20,15 +20,15 @@ export const polywarp = ({
   };
 
   return {
-    name: "@laravel/vite-plugin-polywarp",
+    name: "@itiden/vite-plugin-polywarp",
     enforce: "pre",
     buildStart() {
-      this.info('Running "php artisan polywarp:generate"');
       return runCommand();
     },
-    async handleHotUpdate({ file, server }) {
+    async hotUpdate({ file, server }) {
       if (shouldRun(patterns, { file, server })) {
         await runCommand();
+        this.environment.logger.info("generated polywarp files");
       }
     },
   };
