@@ -25,6 +25,19 @@ export default defineConfig({
 
 ## Usage
 
+### Detecting what language to use
+
+Polywarp will use the lang set on the html tag of your application to determine which language to use:
+
+```html
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+  <!-- <html lang="en"> -->
+</html>
+```
+
+### scripting
+
 By default, polywarp will generate a `translations.ts` file in your `resources/js` directory. (you can change this in the config file)
 
 This file will contain all the types for your translations, and a `t` function to access them:
