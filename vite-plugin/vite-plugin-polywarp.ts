@@ -19,6 +19,8 @@ export const polywarp = (): Plugin => {
   let translation_paths = new Array<string>();
   let outfile = "";
 
+  let paths = new Array<string>();
+
   const runCommand = async () => {
     await execAsync(`php artisan polywarp:generate`);
   };
@@ -38,6 +40,8 @@ export const polywarp = (): Plugin => {
       content_paths = config.content_paths.map(normalizePath);
       translation_paths = config.translation_directories.map(normalizePath);
       outfile = normalizePath(config.output_path);
+
+      paths = [...content_paths, ...translation_paths];
     },
     async buildStart() {
       return runCommand().then(() =>
@@ -45,7 +49,7 @@ export const polywarp = (): Plugin => {
       );
     },
     async hotUpdate({ file, server }) {
-      if (shouldRun(content_paths, { file, server }, outfile)) {
+      if (shouldRun(paths, { file, server }, outfile)) {
         await runCommand().then(() =>
           this.environment.logger.info("generated polywarp files")
         );
