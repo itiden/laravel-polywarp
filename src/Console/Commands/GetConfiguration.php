@@ -17,10 +17,29 @@ final class GetConfiguration extends Command
     {
         $this->line(json_encode([
             'output_path' => Config::string(key: 'polywarp.output_path'),
-            'content_paths' => Config::array(key: 'polywarp.content_paths'),
-            'translation_directories' => app('translator')->getLoader()->paths(),
+            'content_paths' => static::buildGlobPattern(
+                paths: Config::array(key: 'polywarp.content_paths'),
+                extensions: Config::array(key: 'polywarp.extenstion_to_scan'),
+            ),
+            'translation_directories' => static::buildGlobPattern(
+                paths: app('translator')->getLoader()->paths(),
+                extensions: [
+                    'php',
+                    'json',
+                ],
+            ),
         ]));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * @param string[] $paths
+     * @param string[] $extensions
+     * @return string[]
+     */
+    private static function buildGlobPattern(array $paths, array $extensions): array
+    {
+        return array_map(fn($path) => $path . '/**/*.{' . implode(',', $extensions) . '}', $paths);
     }
 }
