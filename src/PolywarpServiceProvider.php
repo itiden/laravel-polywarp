@@ -27,6 +27,10 @@ final class PolywarpServiceProvider extends ServiceProvider
                 GenerateTranslations::class,
                 GetConfiguration::class,
             ]);
+
+            $this->publishes([
+                __DIR__ . '/../config/polywarp.php' => config_path(path: 'polywarp.php'),
+            ], groups: 'polywarp-config');
         }
     }
 }
