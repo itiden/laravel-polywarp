@@ -7,6 +7,8 @@ namespace Itiden\Polywarp\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 
+use function Illuminate\Filesystem\join_paths;
+
 final class GetConfiguration extends Command
 {
     protected $signature = 'polywarp:config';
@@ -40,9 +42,9 @@ final class GetConfiguration extends Command
      */
     private static function buildGlobPattern(array $paths, array $extensions): array
     {
-        return array_map(fn(string $path): string => $path . '/**/*.{' . implode(
+        return array_map(fn(string $path): string => join_paths($path, '/**/*.{' . implode(
             separator: ',',
             array: $extensions,
-        ) . '}', $paths);
+        ) . '}'), $paths);
     }
 }
