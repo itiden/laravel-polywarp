@@ -4,7 +4,7 @@ return [
     /**
      * The paths to scan for translation keys.
      */
-    'script_paths' => [
+    'content_paths' => [
         resource_path('js')
     ],
 

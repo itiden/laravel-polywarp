@@ -6,6 +6,7 @@ namespace Itiden\Polywarp;
 
 use Illuminate\Support\ServiceProvider;
 use Itiden\Polywarp\Console\Commands\GenerateTranslations;
+use Itiden\Polywarp\Console\Commands\GetConfiguration;
 use Override;
 
 final class PolywarpServiceProvider extends ServiceProvider
@@ -24,6 +25,7 @@ final class PolywarpServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 GenerateTranslations::class,
+                GetConfiguration::class,
             ]);
         }
     }
