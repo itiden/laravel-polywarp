@@ -29,7 +29,7 @@ final readonly class Polywarp
                 );
 
                 $acc[$key] = match (pathinfo($file['path'], PATHINFO_EXTENSION)) {
-                    'json' => json_decode($file['path'], associative: true, flags: JSON_THROW_ON_ERROR),
+                    'json' => json_decode(file_get_contents($file['path']), associative: true, flags: JSON_THROW_ON_ERROR),
                     'php' => require $file['path'],
                     default => [],
                 };
@@ -46,12 +46,12 @@ final readonly class Polywarp
     {
         $outputPath = Config::string(key: 'polywarp.output_path');
 
-        return collect(Config::array(key: 'polywarp.script_paths'))
+        return collect(Config::array(key: 'polywarp.content_paths'))
             ->flatMap(File::allFiles(...))
             ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
                 if (
                     !in_array($file->getExtension(), ['ts', 'tsx', 'vue'], strict: true) ||
-                        $file->getPathname() === $outputPath
+                    $file->getPathname() === $outputPath
                 ) {
                     return collect();
                 }

@@ -12,9 +12,10 @@
             <directory>tests/Feature</directory>
         </testsuite>
     </testsuites>
+    <coverage />
     <source>
         <include>
-            <directory>app</directory>
+            <directory>src</directory>
         </include>
     </source>
     <php>
