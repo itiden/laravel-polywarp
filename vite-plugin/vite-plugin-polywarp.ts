@@ -15,10 +15,15 @@ const execAsync = promisify(exec);
 const normalizePath = (path: string) => path.replaceAll("\\", "/");
 
 export const polywarp = (): Plugin => {
+  let laravel_polywarp_config_path = "";
+
   let content_paths = new Array<string>();
   let translation_paths = new Array<string>();
   let outfile = "";
 
+  // instead of having to spread or merge the content/translation paths we save them in a single array
+  // this way we can just check if the file changed is in any of the content or translation paths
+  // this is useful for the hotUpdate method which may be called quite often
   let paths = new Array<string>();
 
   const runCommand = async () => {
@@ -28,7 +33,7 @@ export const polywarp = (): Plugin => {
   return {
     name: "@itiden/vite-plugin-polywarp",
     enforce: "pre",
-    async config() {
+    async config(conf) {
       const { stderr, stdout } = await execAsync("php artisan polywarp:config");
 
       if (stderr) {
@@ -41,21 +46,31 @@ export const polywarp = (): Plugin => {
       translation_paths = config.translation_directories.map(normalizePath);
       outfile = normalizePath(config.output_path);
 
+      laravel_polywarp_config_path = resolve(
+        conf.root ?? process.cwd(),
+        "config/polywarp.php"
+      );
+
       paths = [...content_paths, ...translation_paths];
     },
     async buildStart() {
-      return runCommand().then(() =>
-        this.environment.logger.info("generated polywarp files")
-      );
+      return runCommand();
     },
     async hotUpdate({ file, server }) {
-      if (file === resolve(this.environment.config.root, "config/polywarp.php"))
-        return server.restart();
+      if (file === laravel_polywarp_config_path) {
+        this.environment.logger.clearScreen("info");
+        this.environment.logger.info(
+          "config/polywarp.php config file changed, restarting server",
+          {
+            timestamp: true,
+          }
+        );
+        server.restart();
+        return;
+      }
 
       if (shouldRun(paths, { file, server }, outfile)) {
-        await runCommand().then(() =>
-          this.environment.logger.info("generated polywarp files")
-        );
+        await runCommand();
       }
     },
   };
