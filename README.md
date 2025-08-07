@@ -22,3 +22,17 @@ export default defineConfig({
   ],
 });
 ```
+
+## Usage
+
+By default, polywarp will generate a `translations.ts` file in your `resources/js` directory. (you can change this in the config file)
+
+This file will contain all the types for your translations, and a `t` function to access them:
+
+```ts
+import { t } from "./translations";
+
+console.log(t("welcome")); // "Welcome to our application"
+```
+
+Only the translations keys that are used in your frontend code will be included in the generated file, so you can safely use it without worrying about performance.
