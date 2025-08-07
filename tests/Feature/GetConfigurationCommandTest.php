@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Itiden\Polywarp\Tests\TestCase;
 
+use function Orchestra\Testbench\workbench_path;
+
 it('returns the config in json format', function (): void {
     /** @var TestCase $this */
 
@@ -11,11 +13,11 @@ it('returns the config in json format', function (): void {
         ->expectsOutput(json_encode([
             'output_path' => config('polywarp.output_path'),
             'content_paths' => [
-                '/Users/neo/workspace/packages/laravel-polywarp/workbench/resources/js/**/*.{ts,tsx,vue}',
+                workbench_path('/resources/js/**/*.{ts,tsx,vue}'),
             ],
             'translation_directories' => [
-                '/Users/neo/workspace/packages/laravel-polywarp/vendor/laravel/framework/src/Illuminate/Translation/lang/**/*.{php,json}',
-                '/Users/neo/workspace/packages/laravel-polywarp/workbench/lang/**/*.{php,json}'
+                realpath(workbench_path('../vendor/laravel/framework/src/Illuminate/Translation/lang')) . '/**/*.{php,json}',
+                workbench_path('/lang/**/*.{php,json}'),
             ]
         ]))
         ->assertExitCode(0);
