@@ -55,7 +55,7 @@ final readonly class Polywarp
             ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
                 if (
                     !in_array($file->getExtension(), Config::array(key: 'polywarp.extenstion_to_scan'), strict: true) ||
-                        $file->getPathname() === $outputPath
+                    $file->getPathname() === $outputPath
                 ) {
                     return collect();
                 }
@@ -83,11 +83,10 @@ final readonly class Polywarp
                     subject: $value,
                     matches: $matches,
                 );
-                if (isset($matches[1])) {
-                    $params = $matches[1];
-                }
 
-                if ($params) {
+                $params = $matches[1] ?? [];
+
+                if (count($params) > 0) {
                     $paramStr = implode(
                         separator: ', ',
                         array: array_map(fn(string $p): string => "{$p}: string | number", $params),

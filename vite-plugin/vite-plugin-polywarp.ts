@@ -26,8 +26,16 @@ export const polywarp = (): Plugin => {
   // this is useful for the hotUpdate method which may be called quite often
   let paths = new Array<string>();
 
-  const runCommand = async () => {
-    await execAsync(`php artisan polywarp:generate`);
+  const runCommand = async (
+    cache?: "used-translations" | "available-translations"
+  ) => {
+    const command = "php artisan polywarp:generate";
+
+    await execAsync(
+      [command, cache ? `--use-cache-for=${cache}` : null]
+        .filter(Boolean)
+        .join(" ")
+    );
   };
 
   return {
@@ -69,8 +77,14 @@ export const polywarp = (): Plugin => {
         return;
       }
 
-      if (shouldRun(paths, { file, server }, outfile)) {
-        await runCommand();
+      if (shouldRun(content_paths, { file, server }, outfile)) {
+        await runCommand("available-translations");
+        return;
+      }
+
+      if (shouldRun(translation_paths, { file, server }, outfile)) {
+        await runCommand("used-translations");
+        return;
       }
     },
   };

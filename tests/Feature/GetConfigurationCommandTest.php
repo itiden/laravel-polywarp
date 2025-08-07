@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use Itiden\Polywarp\Console\Commands\GetConfiguration;
 use Itiden\Polywarp\Tests\TestCase;
 
 use function Orchestra\Testbench\workbench_path;
+
+covers(GetConfiguration::class);
 
 it('returns the config in json format', function (): void {
     /** @var TestCase $this */

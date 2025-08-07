@@ -7,6 +7,8 @@ use Itiden\Polywarp\Polywarp;
 
 use function Orchestra\Testbench\workbench_path;
 
+covers(Polywarp::class);
+
 it('discovers all translations in folders', function (): void {
     $translations = app(Polywarp::class)->discoverTranslations();
 
@@ -55,21 +57,25 @@ it('can compile', function (): void {
         ->compile(collect([
             'en' => [
                 'foo' => 'bar',
+                'baz' => 'qux :var',
             ],
             'sv' => [
                 'foo' => 'bar',
+                'baz' => 'qux :var',
             ],
-        ]), collect());
+        ]), collect([
+            'foo',
+        ]));
 
     expect($compiled)
         ->toBe(<<<'TS'
         // This file is auto-generated. Do not edit it manually.
         /* eslint-disable */
 
-        const translations = {"en":[],"sv":[]};
+        const translations = {"en":{"foo":"bar"},"sv":{"foo":"bar"}};
 
         type TranslationFunction = {
-        (key: "foo"): string;
+        (key: "foo"): string;(key: "baz", params: { var: string | number }): string;
         };
 
         export const t: TranslationFunction = (
