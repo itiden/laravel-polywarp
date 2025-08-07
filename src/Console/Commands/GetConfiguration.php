@@ -40,6 +40,9 @@ final class GetConfiguration extends Command
      */
     private static function buildGlobPattern(array $paths, array $extensions): array
     {
-        return array_map(fn($path) => $path . '/**/*.{' . implode(',', $extensions) . '}', $paths);
+        return array_map(fn(string $path): string => $path . '/**/*.{' . implode(
+            separator: ',',
+            array: $extensions,
+        ) . '}', $paths);
     }
 }
