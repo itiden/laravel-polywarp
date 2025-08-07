@@ -1,6 +1,6 @@
 import { minimatch } from "minimatch";
 import { exec } from "node:child_process";
-import osPath from "node:path";
+import osPath, { resolve } from "node:path";
 import { promisify } from "util";
 import { HmrContext, Plugin } from "vite";
 
@@ -49,6 +49,9 @@ export const polywarp = (): Plugin => {
       );
     },
     async hotUpdate({ file, server }) {
+      if (file === resolve(this.environment.config.root, "config/polywarp.php"))
+        return server.restart();
+
       if (shouldRun(paths, { file, server }, outfile)) {
         await runCommand().then(() =>
           this.environment.logger.info("generated polywarp files")
