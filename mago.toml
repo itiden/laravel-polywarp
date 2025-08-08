@@ -21,5 +21,9 @@ name = "naming/class"
 level = "off"
 
 [[linter.rules]]
+name = "naming/interface"
+level = "off"
+
+[[linter.rules]]
 name = "analysis/undefined-function-or-method"
 level = "off"

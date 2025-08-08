@@ -18,6 +18,11 @@ final class PolywarpServiceProvider extends ServiceProvider
             path: __DIR__ . '/../config/polywarp.php',
             key: 'polywarp',
         );
+
+        $this->app->bindIf(
+            abstract: TranslationDirectoriesResolver::class,
+            concrete: GenericTranslationDirectoriesResolver::class,
+        );
     }
 
     public function boot(): void

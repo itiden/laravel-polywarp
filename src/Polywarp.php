@@ -11,9 +11,13 @@ use SplFileInfo;
 
 final readonly class Polywarp
 {
+    public function __construct(
+        private TranslationDirectoriesResolver $translationDirectoriesResolver,
+    ) {}
+
     public function discoverTranslations(): Collection
     {
-        return collect(app('translator')->getLoader()->paths())
+        return collect($this->translationDirectoriesResolver->resolve())
             ->flatMap(static fn(string $path): Collection => collect(File::allFiles(
                 $path,
             ))->map(static function (SplFileInfo $file) use ($path): array {

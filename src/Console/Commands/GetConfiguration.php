@@ -6,6 +6,7 @@ namespace Itiden\Polywarp\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
+use Itiden\Polywarp\TranslationDirectoriesResolver;
 
 use function Illuminate\Filesystem\join_paths;
 
@@ -24,7 +25,7 @@ final class GetConfiguration extends Command
                 extensions: Config::array(key: 'polywarp.extenstion_to_scan'),
             ),
             'translation_directories' => static::buildGlobPattern(
-                paths: app('translator')->getLoader()->paths(),
+                paths: app(TranslationDirectoriesResolver::class)->resolve(),
                 extensions: [
                     'php',
                     'json',
