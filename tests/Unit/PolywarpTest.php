@@ -12,8 +12,12 @@ covers(Polywarp::class);
 it('discovers all translations in folders', function (): void {
     $translations = app(Polywarp::class)->discoverTranslations();
 
+    expect($translations)->toHaveKeys(['en', 'sv']);
+
     foreach (['en', 'sv'] as $lang) {
         expect($translations[$lang])->toHaveKeys([
+            'hello',
+            'world',
             'test.welcome',
             'test.goodbye',
             'test.greeting.morning',
@@ -58,10 +62,12 @@ it('can compile', function (): void {
             'en' => [
                 'foo' => 'bar',
                 'baz' => 'qux :var',
+                'i_have_many_attributes' => ':duplicate :duplicate :duplicate cool :another',
             ],
             'sv' => [
                 'foo' => 'bar',
                 'baz' => 'qux :var',
+                'i_have_many_attributes' => ':duplicate :duplicate :duplicate cool (på svenska) :another'
             ],
         ]), collect([
             'foo',
@@ -75,7 +81,7 @@ it('can compile', function (): void {
         const translations = {"en":{"foo":"bar"},"sv":{"foo":"bar"}};
 
         type TranslationFunction = {
-        (key: "foo"): string;(key: "baz", params: { var: string | number }): string;
+            (key: `foo`): string;(key: `baz`, params: { var: string | number }): string;(key: `i_have_many_attributes`, params: { duplicate: string | number, another: string | number }): string;
         };
 
         export const t: TranslationFunction = (

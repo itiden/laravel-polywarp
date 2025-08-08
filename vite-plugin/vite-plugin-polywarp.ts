@@ -51,7 +51,9 @@ export const polywarp = (): Plugin => {
       const config: ConfigCommanResult = JSON.parse(stdout);
 
       content_paths = config.content_paths.map(normalizePath);
-      translation_paths = config.translation_directories.map(normalizePath);
+      translation_paths = Object.values(config.translation_directories).map(
+        normalizePath
+      );
       outfile = normalizePath(config.output_path);
 
       laravel_polywarp_config_path = resolve(
@@ -100,9 +102,5 @@ const shouldRun = (
   // If the file is the output file, we don't want to run the command
   if (file === outfile) return false;
 
-  return patterns.some((pattern) => {
-    pattern = normalizePath(osPath.resolve(opts.server.config.root, pattern));
-
-    return minimatch(file, pattern);
-  });
+  return patterns.some((pattern) => minimatch(file, pattern));
 };

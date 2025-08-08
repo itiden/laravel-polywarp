@@ -14,33 +14,40 @@ final readonly class Polywarp
     public function discoverTranslations(): Collection
     {
         return collect(app('translator')->getLoader()->paths())
-            ->flatMap(static fn(string $path): Collection => collect(File::allFiles($path))
-                ->map(static fn(SplFileInfo $file): array => [
-                    'path' => $file->getPathname(),
-                    'lang' => str(substr(pathinfo($file->getPathname(), PATHINFO_DIRNAME), strlen($path) + 1))->replace(
-                        search: '/',
-                        replace: '.',
-                    )->toString(),
-                ]))
-            ->reduceWithKeys(static function (Collection $acc, array $file): Collection {
-                $key = implode(
-                    separator: '.',
-                    array: [$file['lang'], pathinfo($file['path'], PATHINFO_FILENAME)],
-                );
+            ->flatMap(static fn(string $path): Collection => collect(File::allFiles(
+                $path,
+            ))->map(static function (SplFileInfo $file) use ($path): array {
+                if ($file->getExtension() === 'json') {
+                    return [
+                        'path' => $file->getPathname(),
+                        'lang' => $file->getFilenameWithoutExtension(),
+                    ];
+                }
 
-                $acc[$key] = match (pathinfo($file['path'], PATHINFO_EXTENSION)) {
+                $langPath = str(str_replace($path, '', $file->getPathname()))->beforeLast('.php');
+                $lang = $langPath->betweenFirst('/', '/')->toString();
+
+                return [
+                    'path' => $file->getPathname(),
+                    'key' => $langPath->after($lang)->explode('/')->filter()->implode('.'),
+                    'lang' => $langPath->betweenFirst('/', '/')->toString(),
+                ];
+            }))
+            ->reduceWithKeys(static function (Collection $acc, array $file): Collection {
+                $lang = $file['lang'];
+
+                $acc[$lang] = array_merge($acc[$lang] ?? [], match (pathinfo($file['path'], PATHINFO_EXTENSION)) {
                     'json' => json_decode(
                         file_get_contents($file['path']),
                         associative: true,
                         flags: JSON_THROW_ON_ERROR,
                     ),
-                    'php' => require $file['path'],
+                    'php' => [$file['key'] => require $file['path']],
                     default => [],
-                };
+                });
 
                 return $acc;
             }, collect())
-            ->undot()
             ->map(static function (array $value): array {
                 return collect($value)->dot()->filter(fn(mixed $trans): bool => is_string($trans))->toArray();
             });
@@ -55,7 +62,7 @@ final readonly class Polywarp
             ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
                 if (
                     !in_array($file->getExtension(), Config::array(key: 'polywarp.extenstion_to_scan'), strict: true) ||
-                        $file->getPathname() === $outputPath
+                    $file->getPathname() === $outputPath
                 ) {
                     return collect();
                 }
@@ -84,17 +91,18 @@ final readonly class Polywarp
                     matches: $matches,
                 );
 
-                $params = $matches[1] ?? [];
+                $params = array_unique($matches[1] ?? []);
 
                 if (count($params) > 0) {
                     $paramStr = implode(
                         separator: ', ',
                         array: array_map(fn(string $p): string => "{$p}: string | number", $params),
                     );
-                    return "(key: \"{$key}\", params: { {$paramStr} }): string;";
+
+                    return "(key: `{$key}`, params: { {$paramStr} }): string;";
                 }
 
-                return "(key: \"{$key}\"): string;";
+                return "(key: `{$key}`): string;";
             })
             ->implode(value: '');
     }
@@ -117,7 +125,7 @@ final readonly class Polywarp
         const translations = {$translationsToIncludeInBundle};
 
         type TranslationFunction = {
-        {$this->compileTypeOverloads($availableTranlsations)}
+            {$this->compileTypeOverloads($availableTranlsations)}
         };
 
         export const t: TranslationFunction = (
