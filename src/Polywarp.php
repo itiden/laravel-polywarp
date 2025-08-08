@@ -24,13 +24,17 @@ final readonly class Polywarp
                     ];
                 }
 
-                $langPath = str(str_replace($path, '', $file->getPathname()))->beforeLast('.php');
-                $lang = $langPath->betweenFirst('/', '/')->toString();
+                $langPath = str(str_replace($path, replace: '', subject: $file->getPathname()))
+                    ->beforeLast(search: '.php');
+                $lang = $langPath->betweenFirst(
+                    from: '/',
+                    to: '/',
+                )->toString();
 
                 return [
                     'path' => $file->getPathname(),
-                    'key' => $langPath->after($lang)->explode('/')->filter()->implode('.'),
-                    'lang' => $langPath->betweenFirst('/', '/')->toString(),
+                    'key' => $langPath->after($lang)->explode(delimiter: '/')->filter()->implode(value: '.'),
+                    'lang' => $lang,
                 ];
             }))
             ->reduceWithKeys(static function (Collection $acc, array $file): Collection {
@@ -60,10 +64,11 @@ final readonly class Polywarp
         return collect(Config::array(key: 'polywarp.content_paths'))
             ->flatMap(File::allFiles(...))
             ->flatMap(static function (SplFileInfo $file) use ($outputPath): Collection {
-                if (
-                    !in_array($file->getExtension(), Config::array(key: 'polywarp.extenstion_to_scan'), strict: true) ||
-                    $file->getPathname() === $outputPath
-                ) {
+                if (!in_array(
+                        needle: $file->getExtension(),
+                        haystack: Config::array(key: 'polywarp.extenstion_to_scan'),
+                        strict: true,
+                    ) || $file->getPathname() === $outputPath) {
                     return collect();
                 }
 
